@@ -1,0 +1,9 @@
+            var Username = UserNameText.Text;
+            var Password = PasswordText.Password;
+
+            using (UserDataContext context = new UserDataContext()){
+
+                bool userfound = context.Users.Any(user => user.Name == Username && user.Password == Password);
+                if (userfound){
+                    GrantAccess();
+                    this.Close();
