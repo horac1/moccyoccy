@@ -1,0 +1,6 @@
+    public class UserDataContext:DbContext
+    {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Data source = DataFile.db");}
+        public DbSet<User> Users { get; set; }
