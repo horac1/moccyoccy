@@ -1,0 +1,20 @@
+public void GrantAccess()
+        {
+            Dashboard win2 = new Dashboard();
+            win2.Show();
+
+
+
+
+        }
+        string HashPassword(string password)
+        {
+            SHA256 hash = SHA256.Create();
+
+            var passwordBytes = Encoding.Default.GetBytes(password);
+
+            var hashedpassword = hash.ComputeHash(passwordBytes);
+
+            return Convert.ToHexString(hashedpassword);
+
+        }
