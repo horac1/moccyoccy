@@ -1,0 +1,18 @@
+private void Create()
+        {
+
+            var Username = register_Username.Text;
+            var Password = register_Psw.Password;
+            var ConfirmPassword = register_ConfirmPsw.Password;
+            var Email = register_Email.Text;
+
+            using (UserDataContext context = new UserDataContext())
+            {
+                var salt = DateTime.Now.ToString();
+                var HashedPW = HashPassword($"{Password}{salt}");
+                context.Users.Add(new User() { Name = Username, Password = HashedPW, ConfirmPassword = ConfirmPassword, Email = Email, Salt = salt });
+                context.SaveChanges();
+
+
+            }
+        }
