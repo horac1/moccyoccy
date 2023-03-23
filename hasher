@@ -1,0 +1,11 @@
+string HashPassword(string Password)
+        {
+            SHA256 hash = SHA256.Create();
+
+            var passwordBytes = Encoding.Default.GetBytes(Password);
+
+            var hashedpassword = hash.ComputeHash(passwordBytes);
+
+            return Convert.ToHexString(hashedpassword);
+
+        }
