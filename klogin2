@@ -1,0 +1,41 @@
+private void btn_Login_Click(object sender, RoutedEventArgs e)
+        {
+            var Username = UserNameText.Text;
+            var Password = PasswordText.Password;
+
+            using (UserDataContext context = new UserDataContext())
+            {
+
+                var salt = context.Users.FirstOrDefault(user => user.Name == Username)?.Salt;
+
+                var HashedPW = HashPassword($"{Password}{salt}");
+
+                bool userfound = context.Users.Any(user => user.Name == Username );
+
+                if (userfound)
+                {
+
+
+                    var loginuser = context.Users.FirstOrDefault(user => user.Name == Username);
+
+
+                    
+
+                    if (HashedPW == context.Users.FirstOrDefault(user => user.Name == Username).Password)
+                    {
+                        GrantAccess();
+                        this.Close();
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("user not found");
+                }
+
+            }
+
+
+
+
+        }
