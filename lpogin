@@ -1,0 +1,50 @@
+private void Btn_Login_Click(object sender, RoutedEventArgs e)
+        {
+            Login loginWindow = new Login();
+            loginWindow.Show();
+            this.Close();
+        }
+
+        private void Btn_Register_Click(object sender, RoutedEventArgs e)
+        {
+            var Username = register_Username.Text;
+            var Password = register_Psw.Password;
+            var ConfirmPassword = register_ConfirmPsw.Password;
+            var Email = register_Email.Text;
+
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(ConfirmPassword) || string.IsNullOrEmpty(Email))
+            {
+                MessageBox.Show("Please fill out all fields");
+                return;
+            }
+
+            if (Password != ConfirmPassword)
+            {
+                MessageBox.Show("Passwords do not match");
+                return;
+            }
+
+            using (UserDataContext context = new UserDataContext())
+            {
+                bool matchingCheck = context.Users.Any(user => user.Name == Username);
+                if (matchingCheck)
+                {
+                    MessageBox.Show("Username is already in use");
+                }
+                else
+                {
+                    bool emailCheck = context.Users.Any(user => user.Email == Email);
+                    if (emailCheck)
+                    {
+                        MessageBox.Show("Email is already in use");
+                    }
+                    else
+                    {
+                        Create();
+                        Login loginWindow = new Login();
+                        loginWindow.Show();
+                        this.Close();
+                    }
+                }
+            }
+        }
