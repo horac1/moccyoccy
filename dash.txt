@@ -86,4 +86,12 @@ namespace HagSoftware
 
 }
 
-
+<Label x:Name="TemperatureLabel" Content="{Binding Temperature}" Margin="5"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+                            <Label Content="Humidity:" Margin="5"/>
+                            <Label x:Name="HumidityLabel" Content="{Binding Humidity}" Margin="5"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+                            <Label Content="Wind speed:" Margin="5"/>
+                            <Label x:Name="WindSpeedLabel" Content="{Binding WindSpeed}" Margin="5"/>
