@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+
+namespace HagSoftware
+{
+    public class WeatherService
+    {
+        private HttpClient httpClient;
+        private string apiKey = "ea40d7ee5721d9db36bb7d92edf90e7b";
+
+        public WeatherService()
+        {
+            httpClient = new HttpClient();
+        }
+
+        public async Task<WeatherData> GetWeatherDataAsync(string location)
+        {
+            string url = $"http://api.openweathermap.org/data/2.5/forecast?q={location}&appid={apiKey}&units=metric";
+            HttpResponseMessage response = await httpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                WeatherData weatherData = JsonConvert.DeserializeObject<WeatherData>(json);
+                return weatherData;
+            }
+            else
+            {
+                throw new Exception($"Error getting weather data: {response.ReasonPhrase}");
+            }
+        }
+
+    }
+
+    public class WeatherData
+    {
+        public double Temperature { get; set; }
+        public double Humidity { get; set; }
+        public double WindSpeed { get; set; }
+        // add other properties as needed
+    }
+
+}
