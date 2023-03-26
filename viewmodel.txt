@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HagSoftware
+{
+    public class WeatherViewModel : INotifyPropertyChanged
+    {
+        private WeatherService weatherService;
+        private string location;
+        private WeatherData weatherData;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public WeatherViewModel()
+        {
+            weatherService = new WeatherService();
+        }
+
+        public string Location
+        {
+            get { return location; }
+            set
+            {
+                location = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Location)));
+            }
+        }
+
+        public WeatherData WeatherData
+        {
+            get { return weatherData; }
+            set
+            {
+                weatherData = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WeatherData)));
+            }
+        }
+
+        public async Task GetWeatherDataAsync()
+        {
+            WeatherData = await weatherService.GetWeatherDataAsync(Location);
+        }
+    }
+    
+}
