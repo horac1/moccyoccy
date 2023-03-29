@@ -1,0 +1,76 @@
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Windows;
+using Newtonsoft.Json;
+
+namespace Weather.UI
+{
+    public partial class MainWindow : Window
+    {
+        private const string ApiKey = "CBiNrlTxAJyYZt1LnFCdCPFn77tr0x7VP5XB2sUj";
+        private const string ApiUrl = "https://api.api-ninjas.com/v1/airquality?city=";
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+        }
+
+        private async void Search_Click(object sender, RoutedEventArgs e)
+        {
+            string location = Location.Text;
+
+            if (string.IsNullOrWhiteSpace(location))
+            {
+                MessageBox.Show("Please enter a location.");
+                return;
+            }
+
+            string apiUrl = ApiUrl + Uri.EscapeDataString(location);
+            string apiResponse = await FetchDataFromApi(apiUrl);
+
+            if (apiResponse == null)
+            {
+                MessageBox.Show("Failed to fetch air quality data.");
+                return;
+            }
+
+            // Parse the JSON response to get the overall AQI value
+            dynamic jsonResponse = JsonConvert.DeserializeObject(apiResponse);
+            int? overallAqi = jsonResponse.overall_aqi;
+
+            if (overallAqi == null)
+            {
+                MessageBox.Show("Failed to fetch overall AQI data.");
+                return;
+            }
+
+            // Display the overall AQI value in the label
+            AirQualityLabel.Content = $"{overallAqi}";
+        }
+
+
+        private async Task<string> FetchDataFromApi(string url)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
+
+                try
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return responseContent;
+                }
+                catch (HttpRequestException)
+                {
+                    return null;
+                }
+            }
+        }
+
+
+    }
+}
